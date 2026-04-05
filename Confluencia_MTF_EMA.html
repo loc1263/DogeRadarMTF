@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confluencia MTF EMA7/20 - Operabilidad Long</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --card: #1e2937;
+            --text: #e2e8f0;
+            --accent: #60a5fa;
+        }
+
+        [data-theme="light"] {
+            --bg: #f8fafc;
+            --card: #ffffff;
+            --text: #1e2937;
+            --accent: #2563eb;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            transition: background 0.4s;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        h1 {
+            text-align: center;
+            color: var(--accent);
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #64748b;
+            font-weight: normal;
+            margin-bottom: 30px;
+        }
+
+        /* Toggle Switch */
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+        }
+
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 60px;
+            height: 34px;
+        }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: #334155;
+            transition: .4s;
+            border-radius: 34px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+
+        input:checked+.slider {
+            background: #3b82f6;
+        }
+
+        input:checked+.slider:before {
+            transform: translateX(26px);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card);
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        th {
+            background: var(--accent);
+            color: white;
+            padding: 16px 12px;
+            text-align: center;
+        }
+
+        td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid #334155;
+        }
+
+        [data-theme="light"] td {
+            border-bottom: 1px solid #e2e8f0;
+        }
+
+        tr:nth-child(even) {
+            background: #273549;
+        }
+
+        [data-theme="light"] tr:nth-child(even) {
+            background: #f1f5f9;
+        }
+
+        tr:hover {
+            background: #334155;
+            transition: 0.3s;
+        }
+
+        [data-theme="light"] tr:hover {
+            background: #e0f2fe;
+        }
+
+        .binario {
+            font-family: monospace;
+            font-size: 1.2em;
+            letter-spacing: 4px;
+            color: #bae6fd;
+        }
+
+        [data-theme="light"] .binario {
+            color: #1e40af;
+        }
+
+        /* Colores de porcentaje */
+        .excelente td:nth-child(3) {
+            color: #22c55e;
+            font-weight: bold;
+        }
+
+        .buena td:nth-child(3) {
+            color: #4ade80;
+            font-weight: bold;
+        }
+
+        .aceptable td:nth-child(3) {
+            color: #eab308;
+            font-weight: bold;
+        }
+
+        .debil td:nth-child(3) {
+            color: #ef4444;
+        }
+
+        .legend {
+            margin: 30px auto;
+            max-width: 800px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+    </style>
+</head>
+
+<body data-theme="dark">
+    <div class="theme-toggle">
+        <label class="switch">
+            <input type="checkbox" id="themeToggle">
+            <span class="slider"></span>
+        </label>
+    </div>
+
+    <div class="container">
+        <h1>Confluencia MTF EMA 7/20</h1>
+        <h2>Porcentaje de Operabilidad para Long (5 timeframes)</h2>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Combinación</th>
+                    <th>Binario (5m 15m 1H 4H 1D)</th>
+                    <th>% Operabilidad Long</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="debil">
+                    <td>0</td>
+                    <td class="binario">00000</td>
+                    <td>0%</td>
+                </tr>
+                <tr class="debil">
+                    <td>1</td>
+                    <td class="binario">00001</td>
+                    <td>30%</td>
+                </tr>
+                <tr class="debil">
+                    <td>2</td>
+                    <td class="binario">00010</td>
+                    <td>25%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>3</td>
+                    <td class="binario">00011</td>
+                    <td>55%</td>
+                </tr>
+                <tr class="debil">
+                    <td>4</td>
+                    <td class="binario">00100</td>
+                    <td>20%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>5</td>
+                    <td class="binario">00101</td>
+                    <td>50%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>6</td>
+                    <td class="binario">00110</td>
+                    <td>45%</td>
+                </tr>
+                <tr class="excelente">
+                    <td>7</td>
+                    <td class="binario">00111</td>
+                    <td>75%</td>
+                </tr>
+                <tr class="debil">
+                    <td>8</td>
+                    <td class="binario">01000</td>
+                    <td>15%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>9</td>
+                    <td class="binario">01001</td>
+                    <td>45%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>10</td>
+                    <td class="binario">01010</td>
+                    <td>40%</td>
+                </tr>
+                <tr class="buena">
+                    <td>11</td>
+                    <td class="binario">01011</td>
+                    <td>70%</td>
+                </tr>
+                <tr class="debil">
+                    <td>12</td>
+                    <td class="binario">01100</td>
+                    <td>35%</td>
+                </tr>
+                <tr class="buena">
+                    <td>13</td>
+                    <td class="binario">01101</td>
+                    <td>65%</td>
+                </tr>
+                <tr class="buena">
+                    <td>14</td>
+                    <td class="binario">01110</td>
+                    <td>60%</td>
+                </tr>
+                <tr class="excelente">
+                    <td>15</td>
+                    <td class="binario">01111</td>
+                    <td>90%</td>
+                </tr>
+                <tr class="debil">
+                    <td>16</td>
+                    <td class="binario">10000</td>
+                    <td>10%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>17</td>
+                    <td class="binario">10001</td>
+                    <td>40%</td>
+                </tr>
+                <tr class="debil">
+                    <td>18</td>
+                    <td class="binario">10010</td>
+                    <td>35%</td>
+                </tr>
+                <tr class="buena">
+                    <td>19</td>
+                    <td class="binario">10011</td>
+                    <td>65%</td>
+                </tr>
+                <tr class="debil">
+                    <td>20</td>
+                    <td class="binario">10100</td>
+                    <td>30%</td>
+                </tr>
+                <tr class="buena">
+                    <td>21</td>
+                    <td class="binario">10101</td>
+                    <td>60%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>22</td>
+                    <td class="binario">10110</td>
+                    <td>55%</td>
+                </tr>
+                <tr class="excelente">
+                    <td>23</td>
+                    <td class="binario">10111</td>
+                    <td>85%</td>
+                </tr>
+                <tr class="debil">
+                    <td>24</td>
+                    <td class="binario">11000</td>
+                    <td>25%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>25</td>
+                    <td class="binario">11001</td>
+                    <td>55%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>26</td>
+                    <td class="binario">11010</td>
+                    <td>50%</td>
+                </tr>
+                <tr class="excelente">
+                    <td>27</td>
+                    <td class="binario">11011</td>
+                    <td>80%</td>
+                </tr>
+                <tr class="aceptable">
+                    <td>28</td>
+                    <td class="binario">11100</td>
+                    <td>45%</td>
+                </tr>
+                <tr class="excelente">
+                    <td>29</td>
+                    <td class="binario">11101</td>
+                    <td>75%</td>
+                </tr>
+                <tr class="buena">
+                    <td>30</td>
+                    <td class="binario">11110</td>
+                    <td>70%</td>
+                </tr>
+                <tr class="excelente">
+                    <td>31</td>
+                    <td class="binario">11111</td>
+                    <td>100%</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="legend">
+            <div class="legend-item"><span style="color:#22c55e">●</span> ≥ 75% → Excelente</div>
+            <div class="legend-item"><span style="color:#4ade80">●</span> 60-74% → Buena</div>
+            <div class="legend-item"><span style="color:#eab308">●</span> 45-59% → Aceptable</div>
+            <div class="legend-item"><span style="color:#ef4444">●</span> &lt; 45% → Débil</div>
+        </div>
+    </div>
+
+    <script>
+        const toggle = document.getElementById('themeToggle');
+        const body = document.body;
+
+        // Cargar preferencia guardada
+        if (localStorage.getItem('theme') === 'light') {
+            body.setAttribute('data-theme', 'light');
+            toggle.checked = true;
+        }
+
+        toggle.addEventListener('change', () => {
+            if (toggle.checked) {
+                body.setAttribute('data-theme', 'light');
+                localStorage.setItem('theme', 'light');
+            } else {
+                body.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        });
+    </script>
+</body>
+
+</html>
