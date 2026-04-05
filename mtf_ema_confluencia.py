@@ -5,7 +5,6 @@ from datetime import datetime, timezone
 import ccxt
 import pandas as pd
 
-# Mapeo exacto de la tabla HTML: combinacion decimal -> % operabilidad Long
 OPERABILITY_LONG = {
     0: 0,
     1: 30,
@@ -41,8 +40,6 @@ OPERABILITY_LONG = {
     31: 100,
 }
 
-# Orden de bits: 5m 15m 1H 4H 1D
-# Formato: (label, ccxt_timeframe, velas_cerradas_a_revisar_para_cruce)
 TIMEFRAMES = [
     ("5m", "5m", 3),
     ("15m", "15m", 3),
@@ -76,7 +73,6 @@ def fetch_ema_state(
         columns=["timestamp", "open", "high", "low", "close", "volume"],
     )
 
-    # Usamos la vela cerrada mas reciente (penultima) para evitar ruido de vela en formacion.
     close_series = df["close"]
     ema7 = close_series.ewm(span=7, adjust=False).mean()
     ema20 = close_series.ewm(span=20, adjust=False).mean()
@@ -90,7 +86,6 @@ def fetch_ema_state(
     cross_up = False
     cross_down = False
 
-    # Detecta cruce ocurrido dentro de las ultimas N velas cerradas.
     start_idx = max(1, last_closed_idx - cross_lookback + 1)
     for i in range(start_idx, last_closed_idx + 1):
         prev_fast = float(ema7.iloc[i - 1])
@@ -147,7 +142,6 @@ def evaluate_confluence(exchange, symbol: str):
 def print_report(symbol: str, exchange_id: str, result: dict):
     now = datetime.now(timezone.utc).strftime("%Y-%m-%d %H:%M:%S UTC")
 
-    # Anchos fijos de columna (sin contar el padding de 1 espacio a cada lado).
     W = {"tf": 3, "sesgo": 13, "cruce": 24, "ema7": 12, "ema20": 12, "vela": 16}
     widths = list(W.values())
 
@@ -164,7 +158,6 @@ def print_report(symbol: str, exchange_id: str, result: dict):
         segments = ["+" + ch * (w + 2) for w in widths]
         return "".join(segments) + "+"
 
-    # Ancho total del bloque (incluyendo bordes exteriores).
     total = sum(w + 2 for w in widths) + len(widths) + 1
 
     def banner(text):
@@ -209,7 +202,6 @@ def print_report(symbol: str, exchange_id: str, result: dict):
 def print_tabla():
     """Imprime la tabla completa de combinaciones binarias y su operabilidad Long."""
     tfs = " ".join(label for label, _, _ in TIMEFRAMES)
-    # Anchos derivados del contenido mas largo de cada columna.
     col_binary  = max(len(f"BINARIO ({tfs})"), len("0 0 0 0 0"))
     col_decimal = max(len("DECIMAL"), len(str(31)))
     col_op      = max(len("OPERABILIDAD LONG"), len("100%"))
