@@ -1,6 +1,6 @@
 # MTF EMA Confluencia
 
-Herramienta de consola que consulta en tiempo real la confluencia de medias móviles exponenciales (EMA 7 / EMA 20) en múltiples temporalidades para cualquier par de mercado de Binance. Calcula un binario de 5 bits y lo traduce a un porcentaje de operabilidad Long mediante una tabla de referencia fija.
+Script que consulta en tiempo real la confluencia (cruce) de medias móviles exponenciales (EMA 7 / EMA 20) en múltiples temporalidades para cualquier par de mercado de Binance. Calcula un binario de 5 bits y lo traduce a un porcentaje de operabilidad (Long) mediante una tabla de referencia fija.
 
 ---
 
